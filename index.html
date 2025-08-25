@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandvi Singh - Full Stack Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+     
+    <link rel="icon" href="favicon.png" type="image/png">
+    <!-- GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; /* A deeper navy blue */
+            color: #ccd6f6; /* Lighter text for better contrast */
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #64ffda; /* A vibrant mint green accent */
+            transition: width .3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .skill-icon-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .skill-icon-card:hover {
+            transform: translateY(-8px);
+            border-color: #64ffda;
+        }
+        .project-card {
+            transition: transform 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        /* Custom Cursor */
+        .cursor {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #64ffda;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .cursor-grow {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(100, 255, 218, 0.2);
+        }
+        /* Particle.js canvas */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .btn-primary {
+            color: #64ffda;
+            background-color: transparent;
+            border: 1px solid #64ffda;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+    </style>
+</head>
+<body class="w-full">
+    <div class="cursor"></div>
+
+    <!-- Floating Social Bar -->
+    <div class="hidden md:flex flex-col gap-6 fixed bottom-0 left-12 z-10 items-center">
+        <a href="https://github.com/mandvi2708" target="_blank" class="text-gray-400 hover:text-[#64ffda] transition-all duration-300 hover:-translate-y-1"><i class="fab fa-github fa-lg"></i></a>
+        <a href="https://www.linkedin.com/in/mandvi-singh-7a5b79292/" target="_blank" class="text-gray-400 hover:text-[#64ffda] transition-all duration-300 hover:-translate-y-1"><i class="fab fa-linkedin-in fa-lg"></i></a>
+        <a href="https://leetcode.com/u/mandviii/" target="_blank" class="text-gray-400 hover:text-[#64ffda] transition-all duration-300 hover:-translate-y-1"><i class="fa-solid fa-code fa-lg"></i></a>
+        <div class="w-px h-24 bg-gray-600 mt-2"></div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white hover:text-[#64ffda] transition">MS.</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="nav-link text-gray-300 hover:text-[#64ffda] transition duration-300">About</a>
+                <a href="#skills" class="nav-link text-gray-300 hover:text-[#64ffda] transition duration-300">Skills</a>
+                <a href="#projects" class="nav-link text-gray-300 hover:text-[#64ffda] transition duration-300">Projects</a>
+                <a href="#contact" class="nav-link text-gray-300 hover:text-[#64ffda] transition duration-300">Contact</a>
+                <a href="MandviFInal - Copy (2).pdf" target="_blank" class="btn-primary text-sm">Resume</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800">
+             <a href="#about" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">About</a>
+             <a href="#skills" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Skills</a>
+             <a href="#projects" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Projects</a>
+             <a href="#contact" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Contact</a>
+             <a href="MandviFInal - Copy (2).pdf" target="_blank" class="block py-2 px-4 text-sm text-[#64ffda] hover:bg-gray-700">Resume</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6">
+
+        <!-- Home Section -->
+        <section id="home" class="min-h-screen flex items-center relative">
+            <div id="particles-js"></div>
+            <div class="text-left z-10">
+                <p class="g-anim text-lg md:text-xl text-[#64ffda] mb-4">Hi, my name is</p>
+                <h1 class="g-anim text-4xl md:text-7xl font-bold text-white mb-4">Mandvi Singh.</h1>
+                <h2 class="g-anim text-3xl md:text-6xl font-bold text-gray-400 mb-6">
+                    I build things for the web.
+                </h2>
+                <p class="g-anim max-w-xl text-lg text-gray-400 mb-8">
+                    I'm a software engineer based in Greater Noida, specializing in building exceptional digital experiences and bringing ideas to life.
+                </p>
+                <div class="g-anim">
+                    <a href="#projects" class="btn-primary">
+                        Check out my work!
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24">
+            <h2 class="section-title text-3xl font-bold text-center text-white mb-12 flex items-center justify-center gap-4"><span class="text-[#64ffda]">01.</span> About Me</h2>
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-2/3 text-gray-400 space-y-4">
+                    <p>
+                        Hello! I'm Mandvi, a Computer Science student with a passion for developing dynamic and user-friendly web applications. My journey into development is driven by a love for problem-solving and creating impactful digital solutions.
+                    </p>
+                    <p>
+                        I've gained hands-on experience through my internship as a Frontend Web Developer at Vision and Solutions, where I collaborated with a team to develop and deploy production-ready code for a live business website. I thrive in team environments and enjoy participating in hackathons like the Smart India Hackathon and coding challenges.
+                    </p>
+                    <ul class="grid grid-cols-2 gap-2 mt-4 text-gray-300 font-mono text-sm">
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>React.js & Next.js</li>
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>Node.js & Express.js</li>
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>JavaScript & TypeScript</li>
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>MongoDB & SQL</li>
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>WebRTC & Socket.IO</li>
+                        <li class="flex items-center gap-2"><span class="text-[#64ffda]">&gt;</span>Git & GitHub</li>
+                    </ul>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="w-64 h-64 rounded-lg overflow-hidden relative group">
+                        <div class="absolute w-full h-full border-2 border-[#64ffda] rounded-lg transform translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300"></div>
+                        <img src="\PHOTO.JPG" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/400x400/0a192f/ccd6f6?text=Error'"
+                             alt="Mandvi Singh" 
+                             class="relative w-full h-full object-cover rounded-lg z-10 grayscale group-hover:grayscale-0 transition-all duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-24">
+            <h2 class="section-title text-3xl font-bold text-center text-white mb-12 flex items-center justify-center gap-4"><span class="text-[#64ffda]">02.</span> Technologies I Use</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-6 text-center">
+                    <!-- Skill Icons will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-24">
+            <h2 class="section-title text-3xl font-bold text-center text-white mb-12 flex items-center justify-center gap-4"><span class="text-[#64ffda]">03.</span> My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Projects will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 text-center">
+            <h2 class="section-title text-3xl font-bold text-white mb-4 flex items-center justify-center gap-4"><span class="text-[#64ffda]">04.</span> What's Next?</h2>
+            <h3 class="text-4xl md:text-5xl font-bold text-white mb-6">Get In Touch</h3>
+            <p class="max-w-xl mx-auto text-gray-400 mb-10">
+                I'm currently open to new opportunities and my inbox is always open. Whether you have a question, a proposal, or just want to say hi, I'll get back to you!
+            </p>
+            <a href="mailto:mandvisingh2708@gmail.com" class="btn-primary">
+                Say Hello
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-6">
+        <p class="text-gray-500 text-sm">Designed & Built by Mandvi Singh</p>
+    </footer>
+
+    <!-- Particle.js library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- DATA FOR SKILLS AND PROJECTS ---
+        const skillsData = [
+            { name: 'JavaScript', icon: 'fab fa-js-square', color: 'text-yellow-400' },
+            { name: 'React', icon: 'fab fa-react', color: 'text-blue-400' },
+            { name: 'Next.js', icon: 'fas fa-arrow-right', color: 'text-white' }, // Using a generic icon
+            { name: 'Node.js', icon: 'fab fa-node-js', color: 'text-green-500' },
+            { name: 'Express', icon: 'fas fa-server', color: 'text-gray-300' }, // Using a generic icon
+            { name: 'MongoDB', icon: 'fas fa-database', color: 'text-green-400' },
+            { name: 'SQL', icon: 'fas fa-database', color: 'text-blue-600' },
+            { name: 'Tailwind', icon: 'fas fa-wind', color: 'text-cyan-400' },
+            { name: 'Git', icon: 'fab fa-git-alt', color: 'text-orange-600' },
+            { name: 'Java', icon: 'fab fa-java', color: 'text-red-500' },
+            { name: 'Docker', icon: 'fab fa-docker', color: 'text-blue-700' },
+            { name: 'AWS', icon: 'fab fa-aws', color: 'text-yellow-500' }
+        ];
+
+        const projectsData = [
+            {
+                title: 'GDVerse - AI Group Discussion',
+                description: 'A full-stack app for real-time group discussions with AI and human participants, featuring video/audio chat and screen sharing.',
+                tags: ['React', 'Node.js', 'MongoDB', 'WebRTC', 'Socket.IO'],
+                demoUrl: '#',
+                githubUrl: 'https://github.com/mandvi2708',
+                image: 'https://placehold.co/600x400/0a192f/64ffda?text=GDVerse'
+            },
+            {
+                title: 'Casa Mia - Airbnb Clone',
+                description: 'A full-stack Airbnb clone where users can browse, search, book, and list rental properties. Features user authentication and a dashboard.',
+                tags: ['Node.js', 'Express', 'MongoDB', 'EJS'],
+                demoUrl: '#',
+                githubUrl: 'https://github.com/mandvi2708',
+                image: 'https://placehold.co/600x400/0a192f/64ffda?text=Casa+Mia'
+            },
+            {
+                title: 'SwiftDine - Food Delivery',
+                description: 'A responsive food delivery app that dynamically fetches real-time restaurant data from the Swiggy public API, using React Hooks.',
+                tags: ['React', 'JavaScript', 'Swiggy API'],
+                demoUrl: '#',
+                githubUrl: 'https://github.com/mandvi2708',
+                image: 'https://placehold.co/600x400/0a192f/64ffda?text=SwiftDine'
+            },
+            {
+                title: 'Modern Web Intro Experience',
+                description: 'A visually engaging landing page with dynamic animations and creative transitions to showcase a personal or brand identity.',
+                tags: ['HTML5', 'CSS3', 'JavaScript', 'GSAP'],
+                demoUrl: '#',
+                githubUrl: 'https://github.com/mandvi2708',
+                image: 'https://placehold.co/600x400/0a192f/64ffda?text=Web+Intro'
+            }
+        ];
+
+        // --- DYNAMICALLY POPULATE SECTIONS ---
+        const skillsContainer = document.querySelector('#skills .grid');
+        skillsData.forEach(skill => {
+            skillsContainer.innerHTML += `
+                <div class="skill-icon-card flex flex-col items-center justify-center p-4 glass-effect rounded-lg">
+                    <i class="${skill.icon} text-5xl mb-2 ${skill.color}"></i>
+                    <p class="text-sm font-medium">${skill.name}</p>
+                </div>
+            `;
+        });
+
+        const projectsContainer = document.querySelector('#projects .grid');
+        projectsData.forEach(project => {
+            projectsContainer.innerHTML += `
+                <div class="project-card glass-effect rounded-lg overflow-hidden flex flex-col">
+                    <img src="${project.image}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a192f/ccd6f6?text=Error'" alt="${project.title}" class="w-full h-48 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">${project.description}</p>
+                        <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs text-[#64ffda]">
+                            ${project.tags.map(tag => `<span>${tag}</span>`).join('')}
+                        </div>
+                        <div class="flex space-x-4 mt-auto">
+                            <a href="${project.demoUrl}" class="text-gray-400 hover:text-[#64ffda] transition"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="${project.githubUrl}" class="text-gray-400 hover:text-[#64ffda] transition"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // --- CUSTOM CURSOR ---
+        const cursor = document.querySelector('.cursor');
+        const interactiveElements = document.querySelectorAll('a, button, .skill-icon-card');
+        window.addEventListener('mousemove', e => {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.2,
+                ease: 'power2.out'
+            });
+        });
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-grow'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-grow'));
+        });
+
+        // --- PARTICLE.JS ---
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true },
+                size: { value: 2, random: true },
+                line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 1, direction: 'none', random: false, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: false } },
+                modes: { repulse: { distance: 100, duration: 0.4 } }
+            },
+            retina_detect: true
+        });
+
+        // --- GSAP ANIMATIONS ---
+        // Hero section entrance
+        gsap.from(".g-anim", {
+            duration: 0.8,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.5
+        });
+
+        // Section reveals on scroll
+        const sections = document.querySelectorAll('section');
+        sections.forEach((section, index) => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // --- HEADER & NAV ---
+        const header = document.getElementById('header');
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scroll Down
+                header.style.top = "-100px";
+            } else {
+                // Scroll Up
+                header.style.top = "0";
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+
+            if (window.scrollY > 50) {
+                header.classList.add('glass-effect', 'shadow-lg');
+            } else {
+                header.classList.remove('glass-effect', 'shadow-lg');
+            }
+        });
+
+        // Active nav link on scroll
+        const navLinks = document.querySelectorAll('.nav-link');
+        sections.forEach(section => {
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top center",
+                end: "bottom center",
+                onToggle: self => {
+                    const id = section.getAttribute('id');
+                    const correspondingLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                    if (self.isActive && correspondingLink) {
+                        navLinks.forEach(link => link.classList.remove('active'));
+                        correspondingLink.classList.add('active');
+                    }
+                }
+            });
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu on link click
+        const mobileNavLinks = mobileMenu.querySelectorAll('a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    });
+    </script>
+</body>
+</html>
